@@ -1,6 +1,8 @@
 const path = require('path') //paht -> modulo interno de node para trabajar con rutas de archivos, require -> funcion para importar modulos, path -> modulo para trabajar con rutas de archivos
 const HtmlWebpackPlugin = require('html-webpack-plugin') //plugin para generar un archivo html a partir de una plantilla, html-webpack-plugin -> plugin para generar un archivo html, require -> funcion para importar modulos
 const MiniCssExtratPlugin = require('mini-css-extract-plugin') //plugin para extraer el css en un archivo separado, mini-css-extract-plugin -> plugin para extraer el css, require -> funcion para importar modulos
+const stylus = require('stylus')
+const CopyPlugin = require('copy-webpack-plugin') //plugin para copiar archivos de una carpeta a otra
 
 
 module.exports = {
@@ -22,9 +24,12 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/, //expresion regular para indicar que archivos se van a procesar, en este caso todos los archivos que terminen con .css
-                use: [MiniCssExtratPlugin.loader, 'css-loader'], //loader para procesar el css, mini-css-extract-plugin para extraer el css en un archivo separado, css-loader para procesar el css
-
+                test: /\.(css|styl)$/, //expresion regular para indicar que archivos se van a procesar, en este caso todos los archivos que terminen con .css o .styl
+                use: [MiniCssExtratPlugin.loader, 'css-loader', 'stylus-loader'], //loader para procesar el css, mini-css-extract-plugin para extraer el css en un archivo separado, css-loader para procesar el css
+            },
+            {
+                test: /\.png$/, //expresion regular para indicar que archivos se van a procesar, en este caso todos los archivos que terminen con .png
+                type: 'asset/resource' //tipo de recurso, asset/resource -> para copiar el archivo a la carpeta de salida y generar una url para el archivo
             }
         ]
     },
@@ -35,6 +40,13 @@ module.exports = {
             filename: './index.html' //nombre del archivo generado por webpack, en este caso se va a generar un archivo index.html en la carpeta dist
         }),
         new MiniCssExtratPlugin(), //instancia del plugin para extraer el css en un archivo separado
-        
+        new CopyPlugin({
+            patterns: [{
+                // ORIGEN: "Desde mi ubicación actual (__dirname), entra a 'src' y luego a 'assets/images'"
+                from: path.resolve(__dirname, 'src', 'assets/images'), //ruta de la carpeta de origen, en este caso se encuentra en la carpeta src/assets/images
+                // DESTINO: "Ponlo dentro de 'assets/images' (Webpack ya sabe que es dentro de la carpeta /dist)"
+                to: 'assets/images' //ruta de la carpeta de destino, en este caso se va a generar una carpeta assets/images en la carpeta dist
+            }]
+        })
     ]
 }
