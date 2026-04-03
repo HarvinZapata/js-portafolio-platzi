@@ -3,8 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin') //plugin para generar u
 const MiniCssExtratPlugin = require('mini-css-extract-plugin') //plugin para extraer el css en un archivo separado, mini-css-extract-plugin -> plugin para extraer el css, require -> funcion para importar modulos
 // const stylus = require('stylus') //loader para procesar el stylus, stylus -> loader para procesar el stylus, require -> funcion para importar modulos
 const CopyPlugin = require('copy-webpack-plugin') //plugin para copiar archivos de una carpeta a otra
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin') //plugin para minimizar el css
-const TerserPlugin = require('terser-webpack-plugin') //plugin para minimizar el javascript 
 const Dotenv = require('dotenv-webpack') //plugin para cargar variables de entorno desde un archivo .env
 
 
@@ -16,6 +14,8 @@ module.exports = {
         filename: '[name].[contenthash].js', //nombre del archivo generado por webpack, [name] -> nombre del punto de entrada, [contenthash] -> hash del contenido del archivo, para evitar problemas de cache
         assetModuleFilename: 'assets/images/[hash][ext][query]' //nombre del archivo generado por webpack para los archivos de imagen, [hash] -> hash del contenido del archivo, [ext] -> extension del archivo, [query] -> query string del archivo
     },
+    mode: "development", //modo de desarrollo, development -> paa no minimizar el codigo y generar un source map
+    
     resolve: {
         extensions: ['.js'], //extensiones de archivos que webpack va a resolver, en este caso solo .js
         alias: {
@@ -77,11 +77,4 @@ module.exports = {
         }),
         new Dotenv() //instancia del plugin para cargar variables de entorno desde un archivo .env
     ],
-    optimization: {
-        minimize: true, //indica que se va a minimizar el codigo
-        minimizer: [
-            new CssMinimizerPlugin(), //instancia del plugin para minimizar el css
-            new TerserPlugin() //instancia del plugin para minimizar el javascript
-        ]
-    }
 }
