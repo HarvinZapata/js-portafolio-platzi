@@ -4,6 +4,10 @@ const MiniCssExtratPlugin = require('mini-css-extract-plugin') //plugin para ext
 // const stylus = require('stylus') //loader para procesar el stylus, stylus -> loader para procesar el stylus, require -> funcion para importar modulos
 const CopyPlugin = require('copy-webpack-plugin') //plugin para copiar archivos de una carpeta a otra
 const Dotenv = require('dotenv-webpack') //plugin para cargar variables de entorno desde un archivo .env
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;//plugin para analizar el tamaño del bundle, webpack-bundle-analyzer -> plugin para analizar el tamaño del bundle, require -> funcion para importar modulos    
+
+
+
 
 
 module.exports = {
@@ -14,7 +18,8 @@ module.exports = {
         assetModuleFilename: 'assets/images/[hash][ext][query]' //nombre del archivo generado por webpack para los archivos de imagen, [hash] -> hash del contenido del archivo, [ext] -> extension del archivo, [query] -> query string del archivo
     },
     mode: "development", //modo de desarrollo, development -> paa no minimizar el codigo y generar un source map
-    watch: true, //indica que webpack va a estar observando los cambios en los archivos, watch -> para que webpack este observando los cambios en los archivos y vuelva a generar el bundle cada vez que haya un cambio
+    // watch: true, //indica que webpack va a estar observando los cambios en los archivos, watch -> para que webpack este observando los cambios en los archivos y vuelva a generar el bundle cada vez que haya un cambio
+    devtool: 'source-map', //tipo de source map,son da un mapa del codigo original, para facilitar la depuracion.
 
     resolve: {
         extensions: ['.js'], //extensiones de archivos que webpack va a resolver, en este caso solo .js
@@ -75,6 +80,17 @@ module.exports = {
                 to: 'assets/images' //ruta de la carpeta de destino, en este caso se va a generar una carpeta assets/images en la carpeta dist
             }]
         }),
-        new Dotenv() //instancia del plugin para cargar variables de entorno desde un archivo .env
+        new Dotenv(), //instancia del plugin para cargar variables de entorno desde un archivo .env
+        new BundleAnalyzerPlugin(), //instancia del plugin para analizar el tamaño del bundle   
+
+
+
     ],
+    devServer: {
+        static: path.join(__dirname, 'dist'), //ruta de la carpeta de salida, en este caso se encuentra en la carpeta dist
+        compress: true, //indica que se va a comprimir el contenido, para mejorar el rendimiento
+        historyApiFallback: true, //indica que se va a redirigir todas las rutas al archivo index.html, para que el router de la aplicacion pueda manejar las rutas
+        port: 3006, //puerto en el que se va a ejecutar el servidor de desarrollo
+
+    }
 }
