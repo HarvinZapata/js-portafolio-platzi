@@ -6,6 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin') //plugin para copiar archivos 
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin') //plugin para minimizar el css
 const TerserPlugin = require('terser-webpack-plugin') //plugin para minimizar el javascript 
 const Dotenv = require('dotenv-webpack') //plugin para cargar variables de entorno desde un archivo .env
+const { CleanWebpackPlugin } = require('clean-webpack-plugin') //plugin para limpiar la carpeta de salida antes de generar los archivos, clean-webpack-plugin -> plugin para limpiar la carpeta de salida (dist)
 
 
 
@@ -75,7 +76,8 @@ module.exports = {
                 to: 'assets/images' //ruta de la carpeta de destino, en este caso se va a generar una carpeta assets/images en la carpeta dist
             }]
         }),
-        new Dotenv() //instancia del plugin para cargar variables de entorno desde un archivo .env
+        new Dotenv(), //instancia del plugin para cargar variables de entorno desde un archivo .env
+        new CleanWebpackPlugin() //instancia del plugin para limpiar la carpeta de salida antes de generar los archivos
     ],
     optimization: {
         minimize: true, //indica que se va a minimizar el codigo

@@ -6,7 +6,6 @@ const CopyPlugin = require('copy-webpack-plugin') //plugin para copiar archivos 
 const Dotenv = require('dotenv-webpack') //plugin para cargar variables de entorno desde un archivo .env
 
 
-
 module.exports = {
     entry: './src/index.js', //punto de entrada de la aplicacion, donde se encuentra el archivo principal de la aplicacion
     output: {
@@ -15,7 +14,8 @@ module.exports = {
         assetModuleFilename: 'assets/images/[hash][ext][query]' //nombre del archivo generado por webpack para los archivos de imagen, [hash] -> hash del contenido del archivo, [ext] -> extension del archivo, [query] -> query string del archivo
     },
     mode: "development", //modo de desarrollo, development -> paa no minimizar el codigo y generar un source map
-    
+    watch: true, //indica que webpack va a estar observando los cambios en los archivos, watch -> para que webpack este observando los cambios en los archivos y vuelva a generar el bundle cada vez que haya un cambio
+
     resolve: {
         extensions: ['.js'], //extensiones de archivos que webpack va a resolver, en este caso solo .js
         alias: {
